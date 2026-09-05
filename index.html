@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dokilabs — AI 캐릭터와 나누는 오늘의 특별한 순간</title>
+<meta name="description" content="AI 캐릭터와 메시지를 주고받고, 영상통화로 목소리를 나눕니다. iOS·Android.">
+<meta property="og:title" content="dokilabs">
+<meta property="og:description" content="AI 캐릭터와 나누는 오늘의 특별한 순간">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%2307080A'/><text x='16' y='23' font-size='19' font-family='system-ui' font-weight='700' fill='%2333A885' text-anchor='middle'>D</text></svg>">
+<style>
+  :root {
+    --bg: #07080a;
+    --surface: #101116;
+    --line: #1e2027;
+    --text: #f4f5f7;
+    --muted: #8b93a1;
+    --rose: #c26180;
+    --pink: #ff578a;
+    --green: #33a885;
+    --violet: #8566f0;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+                 "Noto Sans KR", system-ui, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { width: min(100% - 40px, 940px); margin-inline: auto; }
+
+  /* ── 헤더 ───────────────────────────── */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+  .brand { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .brand span { color: var(--green); }
+  .bar a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600; }
+  .bar a:hover { color: var(--text); }
+
+  /* ── 히어로 ─────────────────────────── */
+  .hero { padding: 96px 0 72px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -30% 0 auto 50%;
+    width: 780px; height: 780px; transform: translateX(-50%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--violet) 22%, transparent), transparent 62%);
+    pointer-events: none;
+  }
+  .hero > * { position: relative; }
+  .hero h1 {
+    margin: 0 0 18px; font-size: clamp(34px, 7vw, 62px);
+    letter-spacing: -0.035em; line-height: 1.15; font-weight: 800;
+  }
+  .hero h1 em { font-style: normal; color: var(--pink); }
+  .hero p { margin: 0 auto; max-width: 30rem; color: var(--muted); font-size: clamp(15px, 2.4vw, 18px); }
+
+  .badges { display: flex; gap: 8px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+  .badge {
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 15px; font-size: 13px; font-weight: 600; color: var(--muted);
+    background: var(--surface);
+  }
+
+  /* ── 섹션 공통 ──────────────────────── */
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  h2 { margin: 0 0 10px; font-size: clamp(21px, 3.4vw, 27px); letter-spacing: -0.025em; }
+  .lead { margin: 0 0 34px; color: var(--muted); max-width: 34rem; }
+
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 18px; padding: 24px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 16px; letter-spacing: -0.01em; }
+  .card p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .dot { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; margin-bottom: 14px; }
+  .dot svg { width: 18px; height: 18px; }
+
+  /* ── 관계 단계 ──────────────────────── */
+  .stages { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .stage {
+    border: 1px solid var(--line); border-radius: 16px; padding: 20px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--rose) 12%, transparent), transparent 70%);
+  }
+  .stage b { display: block; font-size: 15px; margin-bottom: 4px; }
+  .stage span { color: var(--muted); font-size: 13.5px; }
+  .stage .n { color: var(--rose); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; }
+
+  /* ── 안내 ───────────────────────────── */
+  .notice {
+    border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px;
+    background: var(--surface); color: var(--muted); font-size: 14.5px;
+  }
+  .notice b { color: var(--text); }
+
+  footer { padding: 40px 0 60px; color: var(--muted); font-size: 13.5px; border-top: 1px solid var(--line); }
+  footer a { color: var(--muted); }
+  .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card, .stage { transition: border-color .2s ease, transform .2s ease; }
+    .card:hover, .stage:hover { border-color: #2c2f39; transform: translateY(-2px); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand">doki<span>labs</span></div>
+    <a href="mailto:dokilabs26@gmail.com">문의</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="hero">
+      <h1>AI 캐릭터와 나누는<br><em>오늘의 특별한 순간</em></h1>
+      <p>메시지를 주고받고, 영상통화로 목소리를 나눕니다.<br>대화를 이어갈수록 관계가 달라집니다.</p>
+      <div class="badges">
+        <div class="badge">iOS</div>
+        <div class="badge">Android</div>
+        <div class="badge">한국어</div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2>무엇을 하나요</h2>
+      <p class="lead">캐릭터를 고르고, 이야기를 나누고, 통화로 마음을 얻습니다.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="dot" style="background: color-mix(in srgb, var(--violet) 18%, transparent)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#a48cf5" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+            </svg>
+          </div>
+          <h3>탐색</h3>
+          <p>성격도 목소리도 다른 캐릭터를 넘겨 보며 고릅니다. 짧은 영상으로 먼저 만납니다.</p>
+        </div>
+        <div class="card">
+          <div class="dot" style="background: color-mix(in srgb, var(--pink) 18%, transparent)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ff8fb0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/>
+            </svg>
+          </div>
+          <h3>대화</h3>
+          <p>메시지를 보내면 캐릭터가 자기 말투로 답합니다. 나눈 이야기는 다음 대화에 이어집니다.</p>
+        </div>
+        <div class="card">
+          <div class="dot" style="background: color-mix(in srgb, var(--green) 18%, transparent)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5cc9a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="6" width="13" height="12" rx="3"/><path d="M15 10l6-3v10l-6-3z"/>
+            </svg>
+          </div>
+          <h3>영상통화</h3>
+          <p>말을 걸면 목소리로 답합니다. 통화에서 나눈 이야기가 관계를 한 칸 올립니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>관계는 단계로 자랍니다</h2>
+      <p class="lead">처음부터 가까운 사이는 없습니다. 통화를 넘길 때마다 한 칸씩 올라갑니다.</p>
+      <div class="stages">
+        <div class="stage"><span class="n">STAGE 1</span><b>알아가는 중</b><span>서로를 처음 알아가는 자리</span></div>
+        <div class="stage"><span class="n">STAGE 2</span><b>썸타는 중</b><span>말이 조금씩 편해지는 사이</span></div>
+        <div class="stage"><span class="n">STAGE 3</span><b>여자친구</b><span>채팅과 모닝콜이 열립니다</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>알아두실 것</h2>
+      <div class="notice">
+        <p style="margin:0 0 10px"><b>모든 캐릭터는 생성형 AI로 만든 가상 인물입니다.</b>
+        실존 인물을 모델로 하지 않으며, 대화·음성·이미지·영상은 AI가 만들어 낸 것입니다.</p>
+        <p style="margin:0">이용에는 만 16세 이상 확인과 약관 동의가 필요합니다.
+        부적절한 콘텐츠는 앱 안에서 신고·차단할 수 있고, 접수된 신고는 검토 후 조치합니다.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>© dokilabs</div>
+    <div><a href="mailto:dokilabs26@gmail.com">dokilabs26@gmail.com</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
